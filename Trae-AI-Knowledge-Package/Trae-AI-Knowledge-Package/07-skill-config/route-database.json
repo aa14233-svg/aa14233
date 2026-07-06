@@ -1,0 +1,9 @@
+{
+  "version": "1.0",
+  "description": "AI Optimizer RAG 路由数据库",
+  "routes": [
+    { "pattern": "api/*", "target": "backend API handler" },
+    { "pattern": "frontend/*", "target": "frontend route" },
+    { "pattern": "database/*", "target": "database table" }
+  ]
+}

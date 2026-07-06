@@ -1,0 +1,29 @@
+{
+  "mcpServers": {
+    "cc-switch": {
+      "command": "node",
+      "args": ["E:\\cc-switch\\mcp\\cc-switch-server.js"],
+      "description": "CC Switch MCP — Provider 切换、MCP 管理 (10 工具)"
+    },
+    "token-stats": {
+      "command": "node",
+      "args": ["E:\\cc-switch\\mcp\\token-stats-server.js"],
+      "description": "Token Stats MCP — Token 审计、预算管理 (6 工具)"
+    },
+    "master-engineer-hub": {
+      "command": "node",
+      "args": ["E:\\cc-switch\\mcp\\hub-server.js"],
+      "description": "Master Engineer Hub — 路由编排、引力盆、Agent 派发 (6 工具)"
+    },
+    "trae-relay": {
+      "command": "node",
+      "args": ["E:\\cc-switch\\trae-ws-relay.js"],
+      "description": "TRAE 桥中继 — WebSocket 实时消息中继 (port 9877)"
+    },
+    "trae-bridge": {
+      "command": "node",
+      "args": ["E:\\cc-switch\\trae-bridge-server.js"],
+      "description": "TRAE 双应用消息桥 v2 — WebSocket 直连, JSON-RPC 2.0"
+    }
+  }
+}

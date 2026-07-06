@@ -1,0 +1,29 @@
+{
+  "mcpServers": {
+    "obsidian-files": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", ".obsidian-vault"],
+      "description": "Obsidian vault file system access"
+    },
+    "obsidian-search": {
+      "command": "node",
+      "args": [".trae/skills/ai-coding-optimizer/mcp/obsidian-search-server.js"],
+      "description": "Obsidian hybrid search with ripgrep + grep"
+    },
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://ai_optimizer:${PGPASSWORD}@localhost:5432/ai_coding_optimizer"],
+      "description": "PostgreSQL database access"
+    },
+    "postgres-admin": {
+      "command": "node",
+      "args": [".trae/skills/ai-coding-optimizer/mcp/postgres-admin-server.js"],
+      "description": "PostgreSQL administration and maintenance"
+    },
+    "rag-search": {
+      "command": "node",
+      "args": [".trae/skills/ai-coding-optimizer/mcp/rag-search-server.js"],
+      "description": "RAG hybrid search for route database and API documentation"
+    }
+  }
+}

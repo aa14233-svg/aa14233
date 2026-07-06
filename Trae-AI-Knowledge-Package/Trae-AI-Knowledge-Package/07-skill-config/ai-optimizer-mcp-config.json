@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "obsidian-files": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", ".obsidian-vault"],
+      "description": "Obsidian vault file system access"
+    },
+    "obsidian-search": {
+      "command": "node",
+      "args": [".trae/skills/ai-coding-optimizer/mcp/obsidian-search-server.js"],
+      "description": "Obsidian hybrid search"
+    },
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://localhost:5432/ai_coding_optimizer"],
+      "description": "PostgreSQL database"
+    },
+    "rag-search": {
+      "command": "node",
+      "args": [".trae/skills/ai-coding-optimizer/mcp/rag-search-server.js"],
+      "description": "RAG hybrid search"
+    }
+  }
+}

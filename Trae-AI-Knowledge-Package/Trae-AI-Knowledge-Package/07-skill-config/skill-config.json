@@ -1,0 +1,23 @@
+{
+  "disabledSkills": [
+    "executing-plans",
+    "omnipotent-engineer",
+    "lso-os",
+    "writing-plans",
+    "test-driven-development",
+    "ai-coding-optimizer",
+    "brainstorming"
+  ],
+  "builtinSkillStatus": {
+    "TRAE-code-review": true,
+    "TRAE-debugger": true,
+    "TRAE-dynamic-ui": false,
+    "TRAE-generate-mini-app": true
+  },
+  "managedSkills": {
+    "master-engineer-hub": "user_upload",
+    "token-stats": "user_upload",
+    "cc-switch": "user_upload"
+  },
+  "deletedSkills": []
+}
