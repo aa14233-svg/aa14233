@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visual Particle System — 动态色彩粒子引擎</title>
+  <style>
+    /* ── 全局重置 ── */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0a0a1a;
+      font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+    }
+
+    /* ── 粒子 Canvas ── */
+    #particle-canvas {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* ── HUD 叠加层 ── */
+    #hud {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      text-align: center;
+      pointer-events: none;
+      user-select: none;
+      text-shadow: 0 0 12px rgba(0, 0, 0, 0.8);
+      line-height: 1.6;
+    }
+
+    #hud .fps {
+      font-size: 22px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    #hud .label {
+      font-size: 11px;
+      opacity: 0.5;
+      text-transform: uppercase;
+    }
+
+    /* ── 控制面板 ── */
+    #controls {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    #controls button {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: rgba(255, 255, 255, 0.8);
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-family: inherit;
+      transition: all 0.2s;
+      backdrop-filter: blur(8px);
+    }
+
+    #controls button:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    #controls button:active {
+      transform: scale(0.96);
+    }
+
+    /* ── 加载占位 ── */
+    #loading {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50%      { opacity: 0.8; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 加载指示 -->
+  <div id="loading">Initiating Particle Engine...</div>
+
+  <!-- 粒子 Canvas（由 main.ts 接管） -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- HUD 性能信息 -->
+  <div id="hud">
+    <div class="fps" id="fps-display">--</div>
+    <div class="label">FPS · <span id="particle-count">0</span> particles</div>
+  </div>
+
+  <!-- 控制按钮 -->
+  <div id="controls">
+    <button id="btn-palette" title="切换调色板">🎨 Palette</button>
+    <button id="btn-pause" title="暂停/恢复">⏸ Pause</button>
+    <button id="btn-reset" title="重置粒子">↺ Reset</button>
+  </div>
+
+  <!-- Vite 入口 -->
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

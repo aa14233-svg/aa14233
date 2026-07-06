@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深色知识管理</title>
+    <style id="theme-vars">
+:root {
+  /* Brand prefix: dka */
+  --dka-color-primary: #d9773a;
+  --dka-color-primary-hover: #e8894a;
+  --dka-color-primary-active: #c4682e;
+  --dka-color-primary-light: rgba(217, 119, 58, 0.15);
+  --dka-color-primary-lighter: rgba(217, 119, 58, 0.08);
+
+  --dka-bg-base: #1a0f0e;
+  --dka-bg-surface: #241715;
+  --dka-bg-elevated: #2d1d1a;
+  --dka-bg-hover: #352320;
+  --dka-bg-sidebar: #1c1210;
+  --dka-bg-active: #3d2824;
+  --dka-bg-input: #1e1311;
+
+  --dka-text-primary: #d4d0cc;
+  --dka-text-secondary: #a09894;
+  --dka-text-muted: #7a7270;
+  --dka-text-inverse: #1a0f0e;
+
+  --dka-border: #362825;
+  --dka-border-light: #2d1f1c;
+  --dka-border-focus: #d9773a;
+
+  --dka-accent-orange: #d9773a;
+  --dka-accent-gold: #c9a84c;
+  --dka-accent-teal: #4a9d8f;
+
+  --dka-state-success: #4a9d6e;
+  --dka-state-warning: #c9a84c;
+  --dka-state-error: #d4554a;
+  --dka-state-info: #5a8fc9;
+
+  --dka-shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --dka-shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  --dka-shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+
+  --dka-radius-sm: 4px;
+  --dka-radius-md: 8px;
+  --dka-radius-lg: 12px;
+  --dka-radius-full: 9999px;
+
+  --dka-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
+  --dka-font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+
+  --dka-text-xs: 0.75rem;
+  --dka-text-sm: 0.8125rem;
+  --dka-text-base: 0.9375rem;
+  --dka-text-lg: 1.0625rem;
+  --dka-text-xl: 1.25rem;
+  --dka-text-2xl: 1.5rem;
+  --dka-text-3xl: 2rem;
+
+  --dka-leading-tight: 1.25;
+  --dka-leading-normal: 1.5;
+  --dka-leading-relaxed: 1.75;
+
+  --dka-space-1: 0.25rem;
+  --dka-space-2: 0.5rem;
+  --dka-space-3: 0.75rem;
+  --dka-space-4: 1rem;
+  --dka-space-5: 1.25rem;
+  --dka-space-6: 1.5rem;
+  --dka-space-8: 2rem;
+
+  --dka-sidebar-width: 240px;
+  --dka-toolbar-height: 44px;
+  --dka-statusbar-height: 28px;
+
+  /* Tailwind @theme bridge aliases */
+  --dka-background: #1a0f0e;
+  --dka-foreground: #d4d0cc;
+  --dka-primary: #d9773a;
+  --dka-primary-foreground: #1a0f0e;
+  --dka-card: #241715;
+  --dka-card-foreground: #d4d0cc;
+  --dka-muted: #7a7270;
+  --dka-muted-foreground: #a09894;
+  --dka-accent: #d9773a;
+  --dka-accent-foreground: #1a0f0e;
+  --dka-destructive: #d4554a;
+  --dka-destructive-foreground: #d4d0cc;
+  --dka-border: #362825;
+  --dka-input: #1e1311;
+  --dka-ring: #d9773a;
+  --dka-sidebar: #1c1210;
+  --dka-sidebar-foreground: #a09894;
+  --dka-radius-small: 4px;
+  --dka-radius-medium: 8px;
+  --dka-radius-large: 12px;
+}
+
+/* Base */
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--dka-font-sans);
+  font-size: var(--dka-text-base);
+  line-height: var(--dka-leading-normal);
+  color: var(--dka-text-primary);
+  background-color: var(--dka-bg-base);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.dka-heading-sm {
+  font-size: var(--dka-text-sm);
+  font-weight: 600;
+  color: var(--dka-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dka-heading-md {
+  font-size: var(--dka-text-base);
+  font-weight: 600;
+  color: var(--dka-text-primary);
+}
+
+.dka-heading-lg {
+  font-size: var(--dka-text-lg);
+  font-weight: 600;
+  color: var(--dka-text-primary);
+}
+
+.dka-text-body {
+  font-size: var(--dka-text-base);
+  color: var(--dka-text-primary);
+  line-height: var(--dka-leading-relaxed);
+}
+
+.dka-text-muted {
+  font-size: var(--dka-text-sm);
+  color: var(--dka-text-muted);
+}
+
+.dka-text-mono {
+  font-family: var(--dka-font-mono);
+  font-size: var(--dka-text-sm);
+}
+
+.dka-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--dka-border);
+  border-radius: var(--dka-radius-sm);
+  background: var(--dka-bg-elevated);
+  color: var(--dka-text-primary);
+  font-size: var(--dka-text-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.dka-btn:hover {
+  background: var(--dka-bg-hover);
+  border-color: var(--dka-border-focus);
+}
+
+.dka-btn-primary {
+  background: var(--dka-color-primary);
+  color: white;
+  border-color: var(--dka-color-primary);
+}
+
+.dka-btn-primary:hover {
+  background: var(--dka-color-primary-hover);
+}
+
+.dka-btn-icon {
+  padding: 4px;
+  border: none;
+  background: transparent;
+  color: var(--dka-text-secondary);
+  cursor: pointer;
+  border-radius: var(--dka-radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+.dka-btn-icon:hover {
+  background: var(--dka-bg-hover);
+  color: var(--dka-text-primary);
+}
+
+.dka-input {
+  background: var(--dka-bg-input);
+  border: 1px solid var(--dka-border);
+  border-radius: var(--dka-radius-sm);
+  color: var(--dka-text-primary);
+  padding: 6px 10px;
+  font-size: var(--dka-text-sm);
+  font-family: var(--dka-font-sans);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.dka-input:focus {
+  border-color: var(--dka-border-focus);
+}
+
+.dka-input::placeholder {
+  color: var(--dka-text-muted);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--dka-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--dka-text-muted);
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--dka-background);
+    --color-foreground: var(--dka-foreground);
+    --color-card: var(--dka-card);
+    --color-card-foreground: var(--dka-card-foreground);
+    --color-primary: var(--dka-primary);
+    --color-primary-foreground: var(--dka-primary-foreground);
+    --color-muted: var(--dka-muted);
+    --color-muted-foreground: var(--dka-muted-foreground);
+    --color-accent: var(--dka-accent);
+    --color-accent-foreground: var(--dka-accent-foreground);
+    --color-destructive: var(--dka-destructive);
+    --color-destructive-foreground: var(--dka-destructive-foreground);
+    --color-border: var(--dka-border);
+    --color-input: var(--dka-input);
+    --color-ring: var(--dka-ring);
+    --color-sidebar: var(--dka-sidebar);
+    --color-sidebar-foreground: var(--dka-sidebar-foreground);
+    --radius-sm: var(--dka-radius-small);
+    --radius-md: var(--dka-radius-medium);
+    --radius-lg: var(--dka-radius-large);
+  }
+  @layer base {
+    body { background: var(--dka-background); color: var(--dka-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <div class="flex flex-col h-screen w-screen overflow-hidden" style="background:#1a0f0e">
+
+    <!-- TOP TOOLBAR ~44px -->
+    <header class="flex items-center shrink-0" style="height:44px; background:#1c1210; border-bottom:1px solid #362825; padding:0 12px">
+      <div class="flex items-center gap-2 shrink-0">
+        <div style="width:20px;height:20px;background:#d9773a;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#1a0f0e">K</div>
+        <span style="font-size:13px;font-weight:500;color:#d4d0cc;letter-spacing:0.02em">知研</span>
+      </div>
+      <div class="flex-1 flex justify-center px-4" style="min-width:0">
+        <div data-dom-id="search-input" class="flex items-center" style="width:320px;max-width:50%;height:28px;background:#2d1d1a;border-radius:4px;border:1px solid #362825;padding:0 10px;gap:6px">
+          <i data-lucide="search" style="width:14px;height:14px;color:#7a7270;stroke-width:1.5"></i>
+          <input type="text" placeholder="搜索笔记、文件..." class="flex-1 bg-transparent border-none outline-none" style="font-size:12px;color:#d4d0cc;line-height:1" />
+          <span style="font-size:10px;color:#7a7270;background:#241715;padding:1px 5px;border-radius:3px">⌘K</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 shrink-0">
+        <button style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:4px;border:none;background:transparent;color:#a09894;cursor:pointer" title="通知"><i data-lucide="bell" style="width:15px;height:15px;stroke-width:1.5"></i></button>
+        <button style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:4px;border:none;background:transparent;color:#a09894;cursor:pointer" title="设置"><i data-lucide="settings" style="width:15px;height:15px;stroke-width:1.5"></i></button>
+        <div style="width:24px;height:24px;border-radius:50%;background:#3d2824;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#d4d0cc;cursor:pointer">W</div>
+      </div>
+    </header>
+
+    <!-- THREE-COLUMN MAIN AREA -->
+    <div class="flex flex-1" style="min-height:0;overflow:hidden">
+
+      <!-- LEFT SIDEBAR ~240px -->
+      <aside style="width:220px;min-width:220px;background:#1c1210;border-right:1px solid #362825;display:flex;flex-direction:column;overflow:hidden">
+        <!-- Section header -->
+        <div class="flex items-center" style="padding:8px 12px 4px 12px;font-size:11px;font-weight:500;color:#7a7270;letter-spacing:0.04em;text-transform:uppercase">
+          <i data-lucide="folder-tree" style="width:13px;height:13px;margin-right:6px;stroke-width:1.5;color:#7a7270"></i>
+          文件浏览器
+          <button data-dom-id="nav-toggle" style="margin-left:auto;width:20px;height:20px;display:flex;align-items:center;justify-content:center;border:none;border-radius:3px;background:transparent;color:#7a7270;cursor:pointer">
+            <i data-lucide="chevron-down" style="width:13px;height:13px;stroke-width:1.5"></i>
+          </button>
+        </div>
+        <!-- File tree -->
+        <div style="flex:1;overflow-y:auto;padding:2px 4px">
+          <!-- Group: project -->
+          <div style="padding:2px 0">
+            <div class="flex items-center" style="padding:3px 8px;font-size:12px;color:#a09894;gap:4px;cursor:pointer;border-radius:3px;transition:background 0.12s">
+              <i data-lucide="chevron-right" style="width:12px;height:12px;stroke-width:2;color:#7a7270;transition:transform 0.12s"></i>
+              <i data-lucide="folder" style="width:15px;height:15px;stroke-width:1.5;color:#d9773a"></i>
+              <span class="truncate">项目规划</span>
+            </div>
+            <div style="padding-left:28px">
+              <div class="flex items-center" style="padding:3px 8px;font-size:12px;color:#d4d0cc;gap:4px;cursor:pointer;border-radius:3px;background:#3d2824;transition:background 0.12s">
+                <i data-lucide="file-text" style="width:15px;height:15px;stroke-width:1.5;color:#d9773a"></i>
+                <span class="truncate">项目规划文档</span>
+              </div>
+              <div class="flex items-center" style="padding:3px 8px;font-size:12px;color:#a09894;gap:4px;cursor:pointer;border-radius:3px;transition:background 0.12s">
+                <i data-lucide="file-text" style="width:15px;height:15px;stroke-width:1.5;color:#a09894"></i>
+                <span class="truncate">需求分析</span>
+              </div>
+              <div class="flex items-center" style="padding:3px 8px;font-size:12px;color:#a09894;gap:4px;cursor:pointer;border-radius:3px;transition:background 0.12s">
+                <i data-lucide="file-text" style="width:15px;height:15px;stroke-width:1.5;color:#a09894"></i>
+                <span class="truncate">技术方案</span>
+              </div>
+            </div>
+          </div>
+          <!-- Group: daily -->
+          <div style="padding:2px 0;margin-top:2px">
+            <div class="flex items-center" style="padding:3px 8px;font-size:12px;color:#a09894;gap:4px;cursor:pointer;border-radius:3px;transition:background 0.12s">
+              <i data-lucide="chevron-right" style="width:12px;height:12px;stroke-width:2;color:#7a7270"></i>
+              <i data-lucide="folder" style="width:15px;height:15px;stroke-width:1.5;color:#a09894"></i>
+              <span class="truncate">日常笔记</span>
+            </div>
+            <div style="padding-left:28px">
+              <div class="flex items-center" style="padding:3px 8px;font-size:12px;color:#a09894;gap:4px;cursor:pointer;border-radius:3px;transition:background 0.12s">
+                <i data-lucide="file-text" style="width:15px;height:15px;stroke-width:1.5;color:#a09894"></i>
+                <span class="truncate">会议记录 0705</span>
+              </div>
+            </div>
+          </div>
+          <!-- Group: knowledge base -->
+          <div style="padding:2px 0;margin-top:2px">
+            <div class="flex items-center" style="padding:3px 8px;font-size:12px;color:#a09894;gap:4px;cursor:pointer;border-radius:3px;transition:background 0.12s">
+              <i data-lucide="chevron-right" style="width:12px;height:12px;stroke-width:2;color:#7a7270"></i>
+              <i data-lucide="folder" style="width:15px;height:15px;stroke-width:1.5;color:#a09894"></i>
+              <span class="truncate">知识库</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- CENTER CONTENT (flexible) -->
+      <main class="flex flex-col flex-1" style="min-width:0;overflow:hidden;background:#1a0f0e">
+
+        <!-- Document title bar -->
+        <div class="flex items-center shrink-0" style="padding:8px 20px 4px 20px;gap:8px;border-bottom:1px solid #362825">
+          <i data-lucide="edit-3" style="width:14px;height:14px;color:#7a7270;stroke-width:1.5"></i>
+          <input type="text" value="项目规划文档" class="flex-1 bg-transparent border-none outline-none" style="font-size:15px;font-weight:500;color:#d4d0cc;line-height:1.3;min-width:0" />
+          <span style="font-size:11px;color:#7a7270;background:#241715;padding:2px 8px;border-radius:4px;white-space:nowrap">.md</span>
+        </div>
+
+        <!-- Editor toolbar -->
+        <div class="flex items-center shrink-0" style="padding:4px 20px;gap:1px;background:#1a0f0e;border-bottom:1px solid #362825">
+          <div class="flex items-center" style="gap:1px;padding-right:8px;border-right:1px solid #362825">
+            <button style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:none;border-radius:3px;background:transparent;color:#d4d0cc;font-weight:600;font-size:12px;cursor:pointer;transition:background 0.12s" title="粗体"><b>B</b></button>
+            <button style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:none;border-radius:3px;background:transparent;color:#d4d0cc;font-style:italic;font-size:12px;cursor:pointer;transition:background 0.12s" title="斜体"><i>I</i></button>
+            <button style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:none;border-radius:3px;background:transparent;color:#d4d0cc;font-size:12px;text-decoration:underline;cursor:pointer;transition:background 0.12s" title="下划线"><u>U</u></button>
+          </div>
+          <div class="flex items-center" style="gap:1px;padding:0 8px;border-right:1px solid #362825">
+            <button style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:none;border-radius:3px;background:transparent;color:#a09894;font-weight:600;font-size:11px;cursor:pointer;transition:background 0.12s" title="标题1">H1</button>
+            <button style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:none;border-radius:3px;background:transparent;color:#a09894;font-weight:600;font-size:10px;cursor:pointer;transition:background 0.12s" title="标题2">H2</button>
+            <button style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:none;border-radius:3px;background:transparent;color:#a09894;font-size:12px;cursor:pointer;transition:background 0.12s" title="引用"><i data-lucide="quote" style="width:14px;height:14px"></i></button>
+          </div>
+          <div class="flex items-center" style="gap:1px;padding:0 8px;border-right:1px solid #362825">
+            <button style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:none;border-radius:3px;background:transparent;color:#a09894;cursor:pointer;transition:background 0.12s" title="无序列表"><i data-lucide="list" style="width:14px;height:14px"></i></button>
+            <button style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:none;border-radius:3px;background:transparent;color:#a09894;cursor:pointer;transition:background 0.12s" title="有序列表"><i data-lucide="list-ordered" style="width:14px;height:14px"></i></button>
+            <button style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:none;border-radius:3px;background:transparent;color:#a09894;cursor:pointer;transition:background 0.12s" title="任务列表"><i data-lucide="check-square" style="width:14px;height:14px"></i></button>
+          </div>
+          <div class="flex items-center" style="gap:1px;padding-left:8px">
+            <button style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:none;border-radius:3px;background:transparent;color:#a09894;cursor:pointer;transition:background 0.12s" title="代码"><i data-lucide="code" style="width:14px;height:14px"></i></button>
+            <button style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:none;border-radius:3px;background:transparent;color:#a09894;cursor:pointer;transition:background 0.12s" title="表格"><i data-lucide="table" style="width:14px;height:14px"></i></button>
+          </div>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:2px">
+            <button style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:none;border-radius:3px;background:transparent;color:#a09894;cursor:pointer;transition:background 0.12s" title="更多格式"><i data-lucide="more-horizontal" style="width:14px;height:14px"></i></button>
+          </div>
+        </div>
+
+        <!-- Editor content area -->
+        <div style="flex:1;overflow-y:auto;padding:20px 24px 40px 24px;font-size:14px;line-height:1.7;color:#d4d0cc">
+          <!-- H1 -->
+          <h1 style="font-size:22px;font-weight:600;color:#d4d0cc;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #362825;text-wrap:pretty">项目规划文档</h1>
+          <!-- Metadata -->
+          <div style="display:flex;gap:16px;margin-bottom:16px;font-size:12px;color:#7a7270">
+            <span>创建：2026-07-01</span>
+            <span>更新：2026-07-05</span>
+          </div>
+          <!-- H2 -->
+          <h2 style="font-size:16px;font-weight:600;color:#d4d0cc;margin-top:20px;margin-bottom:8px;text-wrap:pretty">项目背景</h2>
+          <p style="margin-bottom:10px;color:#c4c0bc">本项目旨在构建一个面向个人知识工作者的沉浸式知识管理工具，提供高效的信息组织、检索与创作体验。系统采用本地优先架构，支持离线使用，并通过端到端加密保障数据安全。</p>
+          <!-- H2 -->
+          <h2 style="font-size:16px;font-weight:600;color:#d4d0cc;margin-top:20px;margin-bottom:8px;text-wrap:pretty">核心功能</h2>
+          <ul style="list-style:none;padding:0;margin-bottom:10px">
+            <li style="padding:3px 0;padding-left:18px;position:relative;color:#c4c0bc">• 多层级文件管理系统，支持文件夹嵌套与拖拽排序</li>
+            <li style="padding:3px 0;padding-left:18px;position:relative;color:#c4c0bc">• 实时协作编辑，支持多人同时操作同一文档</li>
+            <li style="padding:3px 0;padding-left:18px;position:relative;color:#c4c0bc">• 标签体系与知识图谱，自动建立内容关联</li>
+            <li style="padding:3px 0;padding-left:18px;position:relative;color:#c4c0bc">• 支持 Markdown 语法的富文本编辑器</li>
+          </ul>
+          <!-- H2 -->
+          <h2 style="font-size:16px;font-weight:600;color:#d4d0cc;margin-top:20px;margin-bottom:8px;text-wrap:pretty">技术栈选型</h2>
+          <div style="background:#241715;border:1px solid #362825;border-radius:4px;padding:12px 16px;margin-bottom:10px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#c4c0bc;line-height:1.6;overflow-x:auto">
+            <div><span style="color:#7a7270">// 前端技术栈</span></div>
+            <div><span style="color:#d9773a">const</span> frontend = {</div>
+            <div>&nbsp;&nbsp;framework: <span style="color:#d4d0cc">'React 19 + TypeScript'</span>,</div>
+            <div>&nbsp;&nbsp;editor: <span style="color:#d4d0cc">'ProseMirror'</span>,</div>
+            <div>&nbsp;&nbsp;styling: <span style="color:#d4d0cc">'Tailwind CSS v4'</span>,</div>
+            <div>&nbsp;&nbsp;state: <span style="color:#d4d0cc">'Zustand'</span></div>
+            <div>};</div>
+          </div>
+          <!-- H2 -->
+          <h2 style="font-size:16px;font-weight:600;color:#d4d0cc;margin-top:20px;margin-bottom:8px;text-wrap:pretty">里程碑规划</h2>
+          <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:10px">
+            <thead>
+              <tr style="border-bottom:1px solid #362825">
+                <th style="text-align:left;padding:6px 8px;color:#7a7270;font-weight:500;font-size:11px">阶段</th>
+                <th style="text-align:left;padding:6px 8px;color:#7a7270;font-weight:500;font-size:11px">时间</th>
+                <th style="text-align:left;padding:6px 8px;color:#7a7270;font-weight:500;font-size:11px">交付物</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #2d1d1a">
+                <td style="padding:5px 8px;color:#c4c0bc">Alpha</td>
+                <td style="padding:5px 8px;color:#a09894">2026 Q3</td>
+                <td style="padding:5px 8px;color:#a09894">核心编辑器 + 文件系统</td>
+              </tr>
+              <tr style="border-bottom:1px solid #2d1d1a">
+                <td style="padding:5px 8px;color:#c4c0bc">Beta</td>
+                <td style="padding:5px 8px;color:#a09894">2026 Q4</td>
+                <td style="padding:5px 8px;color:#a09894">协作 + 同步 + 标签系统</td>
+              </tr>
+              <tr>
+                <td style="padding:5px 8px;color:#c4c0bc">v1.0</td>
+                <td style="padding:5px 8px;color:#a09894">2027 Q1</td>
+                <td style="padding:5px 8px;color:#a09894">知识图谱 + 公开 API</td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- H2 -->
+          <h2 style="font-size:16px;font-weight:600;color:#d4d0cc;margin-top:20px;margin-bottom:8px;text-wrap:pretty">会议纪要</h2>
+          <p style="margin-bottom:6px;color:#c4c0bc">2026-07-04 项目启动会达成以下共识：</p>
+          <ul style="list-style:none;padding:0;margin-bottom:4px">
+            <li style="padding:2px 0;padding-left:18px;position:relative;color:#c4c0bc">- 优先实现单机核心功能，同步方案后续迭代</li>
+            <li style="padding:2px 0;padding-left:18px;position:relative;color:#c4c0bc">- 设计语言采用深色暖调，强调沉浸感</li>
+            <li style="padding:2px 0;padding-left:18px;position:relative;color:#c4c0bc">- 每两周一次迭代评审</li>
+          </ul>
+          <!-- Blinking cursor indicator -->
+          <div style="display:flex;align-items:center;gap:2px;margin-top:8px;font-size:14px;color:#d4d0cc">
+            <span style="display:inline-block;width:2px;height:16px;background:#d9773a;animation:blink 1s step-end infinite"></span>
+            <span style="color:#7a7270;font-size:12px">正在输入...</span>
+          </div>
+        </div>
+      </main>
+
+      <!-- RIGHT PANEL ~280px -->
+      <aside style="width:260px;min-width:260px;background:#241715;border-left:1px solid #362825;display:flex;flex-direction:column;overflow:hidden">
+
+        <!-- Document properties -->
+        <div style="padding:12px 14px;border-bottom:1px solid #362825">
+          <div class="flex items-center" style="margin-bottom:10px;gap:6px">
+            <i data-lucide="info" style="width:13px;height:13px;color:#7a7270;stroke-width:1.5"></i>
+            <span style="font-size:11px;font-weight:500;color:#7a7270;letter-spacing:0.04em;text-transform:uppercase">文档属性</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div>
+              <span style="font-size:11px;color:#7a7270;display:block;margin-bottom:2px">创建时间</span>
+              <span style="font-size:13px;color:#d4d0cc">2026-07-01 14:30</span>
+            </div>
+            <div>
+              <span style="font-size:11px;color:#7a7270;display:block;margin-bottom:2px">修改时间</span>
+              <span style="font-size:13px;color:#d4d0cc">2026-07-05 09:15</span>
+            </div>
+            <div>
+              <span style="font-size:11px;color:#7a7270;display:block;margin-bottom:4px">标签</span>
+              <div style="display:flex;flex-wrap:wrap;gap:4px">
+                <span style="display:inline-flex;align-items:center;height:22px;padding:0 8px;font-size:11px;color:#d9773a;background:transparent;border:1px solid #d9773a;border-radius:4px;white-space:nowrap">项目规划</span>
+                <span style="display:inline-flex;align-items:center;height:22px;padding:0 8px;font-size:11px;color:#d9773a;background:transparent;border:1px solid #d9773a;border-radius:4px;white-space:nowrap">文档</span>
+                <span style="display:inline-flex;align-items:center;height:22px;padding:0 8px;font-size:11px;color:#a09894;background:transparent;border:1px solid #362825;border-radius:4px;white-space:nowrap">进行中</span>
+              </div>
+            </div>
+            <div>
+              <span style="font-size:11px;color:#7a7270;display:block;margin-bottom:2px">状态</span>
+              <span style="font-size:13px;color:#d9773a;display:inline-flex;align-items:center;gap:4px">
+                <span style="width:6px;height:6px;border-radius:50%;background:#d9773a;display:inline-block"></span>
+                编辑中
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Outline -->
+        <div style="padding:12px 14px;border-bottom:1px solid #362825">
+          <div class="flex items-center" style="margin-bottom:8px;gap:6px">
+            <i data-lucide="list-tree" style="width:13px;height:13px;color:#7a7270;stroke-width:1.5"></i>
+            <span style="font-size:11px;font-weight:500;color:#7a7270;letter-spacing:0.04em;text-transform:uppercase">大纲</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="padding:4px 8px;font-size:12px;color:#d4d0cc;border-radius:3px;cursor:pointer;transition:background 0.12s">项目背景</div>
+            <div style="padding:4px 8px;font-size:12px;color:#d4d0cc;border-radius:3px;cursor:pointer;transition:background 0.12s">核心功能</div>
+            <div style="padding:4px 12px;font-size:11px;color:#a09894;border-radius:3px;cursor:pointer;transition:background 0.12s">文件管理</div>
+            <div style="padding:4px 12px;font-size:11px;color:#a09894;border-radius:3px;cursor:pointer;transition:background 0.12s">编辑器</div>
+            <div style="padding:4px 8px;font-size:12px;color:#d4d0cc;border-radius:3px;cursor:pointer;transition:background 0.12s">技术栈选型</div>
+            <div style="padding:4px 8px;font-size:12px;color:#d4d0cc;border-radius:3px;cursor:pointer;transition:background 0.12s">里程碑规划</div>
+            <div style="padding:4px 8px;font-size:12px;color:#d4d0cc;border-radius:3px;cursor:pointer;transition:background 0.12s">会议纪要</div>
+          </div>
+        </div>
+
+        <!-- Related documents -->
+        <div style="padding:12px 14px;flex:1;overflow-y:auto">
+          <div class="flex items-center" style="margin-bottom:8px;gap:6px">
+            <i data-lucide="link" style="width:13px;height:13px;color:#7a7270;stroke-width:1.5"></i>
+            <span style="font-size:11px;font-weight:500;color:#7a7270;letter-spacing:0.04em;text-transform:uppercase">相关文档</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="padding:6px 8px;border-radius:4px;cursor:pointer;transition:background 0.12s;background:#2d1d1a">
+              <div style="font-size:12px;color:#d4d0cc;margin-bottom:2px">需求分析</div>
+              <div style="font-size:11px;color:#7a7270">2026-07-03</div>
+            </div>
+            <div style="padding:6px 8px;border-radius:4px;cursor:pointer;transition:background 0.12s;background:#2d1d1a">
+              <div style="font-size:12px;color:#d4d0cc;margin-bottom:2px">技术方案</div>
+              <div style="font-size:11px;color:#7a7270">2026-07-04</div>
+            </div>
+            <div style="padding:6px 8px;border-radius:4px;cursor:pointer;transition:background 0.12s;background:#2d1d1a">
+              <div style="font-size:12px;color:#d4d0cc;margin-bottom:2px">UI 设计规范</div>
+              <div style="font-size:11px;color:#7a7270">2026-07-02</div>
+            </div>
+            <div style="padding:6px 8px;border-radius:4px;cursor:pointer;transition:background 0.12s;background:#2d1d1a">
+              <div style="font-size:12px;color:#d4d0cc;margin-bottom:2px">API 接口文档</div>
+              <div style="font-size:11px;color:#7a7270">2026-07-05</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- BOTTOM STATUSBAR ~28px -->
+    <footer style="height:28px;min-height:28px;background:#1c1210;border-top:1px solid #362825;display:flex;align-items:center;padding:0 12px;font-size:11px;color:#7a7270">
+      <div class="flex items-center gap-4">
+        <span>字数: 847</span>
+        <span>行数: 64</span>
+        <span>字符: 1240</span>
+      </div>
+      <div class="flex items-center gap-3 ml-auto">
+        <span class="flex items-center gap-1.5">
+          <span style="width:6px;height:6px;border-radius:50%;background:#5a9e6f;display:inline-block"></span>
+          已保存
+        </span>
+        <span>Markdown</span>
+        <span>Ctrl+S 保存</span>
+      </div>
+    </footer>
+  </div>
+
+  <script>lucide.createIcons();</script>
+  <style>
+    /* hover states */
+    [style*="cursor:pointer"]:hover { filter: brightness(1.15); }
+    button:hover, [style*="cursor:pointer"]:hover { filter: brightness(1.15); }
+    /* scrollbar */
+    ::-webkit-scrollbar { width:6px; height:6px; }
+    ::-webkit-scrollbar-track { background:transparent; }
+    ::-webkit-scrollbar-thumb { background:#3d2824; border-radius:3px; }
+    ::-webkit-scrollbar-thumb:hover { background:#4d3834; }
+    /* cursor blink animation */
+    @keyframes blink { 50% { opacity:0; } }
+    @media (prefers-reduced-motion:reduce) {
+      *, *::before, *::after { animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+    }
+  </style>
+</body>
+</html>

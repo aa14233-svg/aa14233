@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>太白炁渊 · 命理全栈</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div id="starfield"></div>
+<div class="bg-glow"></div>
+
+<div class="app">
+
+  <!-- 侧栏 -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">☯</div>
+    <div class="nav">
+      <button class="nav-btn active" data-page="dashboard"><span class="icon">✦</span><span class="label">洞悉</span></button>
+      <button class="nav-btn" data-page="lingti"><span class="icon">◈</span><span class="label">灵体对话</span></button>
+      <button class="nav-btn" data-page="bazi"><span class="icon">⏳</span><span class="label">四柱八字</span></button>
+      <button class="nav-btn" data-page="liuyao"><span class="icon">〰</span><span class="label">六爻占卜</span></button>
+      <button class="nav-btn" data-page="ziwei"><span class="icon">✧</span><span class="label">紫微斗数</span></button>
+      <button class="nav-btn" data-page="qimen"><span class="icon">◈</span><span class="label">奇门遁甲</span></button>
+      <button class="nav-btn" data-page="history"><span class="icon">⏎</span><span class="label">排盘历史</span></button>
+      <button class="nav-btn" data-page="knowledge"><span class="icon">📖</span><span class="label">太白炁渊</span></button>
+      <button class="nav-btn" data-page="settings"><span class="icon">⚙</span><span class="label">设置</span></button>
+    </div>
+    <div class="sidebar-ver">v2.0</div>
+  </nav>
+
+  <!-- 主内容 -->
+  <main class="main">
+
+    <!-- ═══ 洞悉 ═══ -->
+    <section class="page active" id="page-dashboard">
+      <div class="page-hdr">
+        <h1><span class="g">✦ 洞悉</span> · 太白炁渊</h1>
+        <p>洞察命运的数字水面。不做一次性算命，做你的长期灵体。<br>以灵体为入口，命理为底层，关系为形态 — 让自我探索在对话中自然发生。</p>
+      </div>
+
+      <!-- 每日灵签 -->
+      <div class="lingqian-card" id="lingqian-card">
+        <div class="qian-icon" id="lq-icon">☯</div>
+        <div class="qian-title" id="lq-title">点击获取今日灵签</div>
+        <div class="qian-desc" id="lq-desc">每天一张专属签卡，节气流年的能量随你流转。</div>
+        <div class="qian-tag" id="lq-tag" style="border-color:var(--gold-dim);color:var(--gold-dim);">✦ 每日灵签</div>
+      </div>
+
+      <!-- 人生K线 -->
+      <div class="card" style="margin-top:20px;">
+        <h3>📈 人生K线 · 近期能量走势</h3>
+        <div class="kline-wrap">
+          <svg class="kline-svg" viewBox="0 0 600 140" id="kline-svg">
+            <defs><linearGradient id="kg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--gold)"/><stop offset="100%" stop-color="var(--gold)" stop-opacity="0"/></linearGradient></defs>
+            <path id="kline-path" d="" fill="none" stroke="var(--gold)" stroke-width="2" opacity="0.7"/>
+            <path id="kline-fill" d="" fill="url(#kg)" opacity="0.15"/>
+          </svg>
+          <div class="kline-label">
+            <span>庚午月</span>
+            <span>辛未月</span>
+            <span>壬申月</span>
+            <span>癸酉月</span>
+            <span>甲戌月</span>
+            <span>乙亥月</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;">
+        <div class="card">
+          <h3>☯ 五行能量观</h3>
+          <div class="wuxing-ring" id="wx-ring"><div class="center">五行<br>平衡</div></div>
+        </div>
+        <div class="card">
+          <h3>⚡ 太白哲言</h3>
+          <div style="padding:12px;background:var(--bg-glass);border-radius:var(--radius-sm);border-left:2px solid var(--gold);margin-bottom:10px;">
+            <div style="font-size:12px;color:var(--gold);font-weight:600;">天行健</div>
+            <div style="font-size:12px;color:var(--text-sec);line-height:1.5;margin-top:3px;">命理给出的是水道图，非宿命判决；借术数以自强。</div>
+          </div>
+          <div style="padding:12px;background:var(--bg-glass);border-radius:var(--radius-sm);border-left:2px solid var(--purple);margin-bottom:10px;">
+            <div style="font-size:12px;color:var(--purple-light);font-weight:600;">地势坤</div>
+            <div style="font-size:12px;color:var(--text-sec);line-height:1.5;margin-top:3px;">术数推演所得无论吉凶，皆以厚重心态承载转化。</div>
+          </div>
+          <div style="padding:12px;background:var(--bg-glass);border-radius:var(--radius-sm);border-left:2px solid var(--cyan);">
+            <div style="font-size:12px;color:var(--cyan);font-weight:600;">命随流水</div>
+            <div style="font-size:12px;color:var(--text-sec);line-height:1.5;margin-top:3px;">命如舟行水上，运势如水流。借水流之势，助舟行远。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 灵体对话 ═══ -->
+    <section class="page" id="page-lingti">
+      <div class="page-hdr">
+        <h1><span class="g">◈ 灵体对话</span> · 与太白炁渊</h1>
+        <p>将困惑交给灵伴，基于命谱 + 命理百科陪你想清楚。不做一次性算命，做你的长期灵体。</p>
+      </div>
+
+      <div style="text-align:center;margin-bottom:20px;">
+        <div class="avatar-ring"><div class="avatar-inner">☯</div></div>
+        <div style="color:var(--gold);font-size:15px;font-weight:600;">太白炁渊 · 灵体在线</div>
+        <div style="color:var(--text-dim);font-size:12px;">你的专属命理修行者</div>
+      </div>
+
+      <div class="chat-box" id="chat-box">
+        <div class="chat-msg king"><div class="bubble">天行健，君子以自强不息。地势坤，君子以厚德载物。命随流水，行运济舟。</div><div class="meta">太白炁渊 · 欢迎</div></div>
+        <div class="chat-msg king"><div class="bubble">贫道太白炁渊，恭候。你面前的水道，可否说与我听？</div><div class="meta">今日 · 灵体苏醒</div></div>
+      </div>
+
+      <div class="chat-input-wrap">
+        <input type="text" id="chat-input" placeholder="把你的困惑说给灵体听..." onkeydown="if(event.key==='Enter')sendChat()">
+        <button onclick="sendChat()">发送 ✦</button>
+      </div>
+    </section>
+
+    <!-- ═══ 四柱八字 ═══ -->
+    <section class="page" id="page-bazi">
+      <div class="page-hdr">
+        <h1><span class="g">⏳ 四柱八字</span> · 命基推算</h1>
+        <p>以出生年月日时排列四柱，以日干为命主分析十神关系。命如初始条件加边界条件的时间演化。</p>
+      </div>
+      <div class="card">
+        <div class="fr">
+          <div class="fg"><label>年</label><input type="number" id="by" value="1990" min="1900" max="2100"></div>
+          <div class="fg"><label>月</label><select id="bm">${[1,2,3,4,5,6,7,8,9,10,11,12].map(m=>`<option value="${m}">${m}月</option>`).join('')}</select></div>
+          <div class="fg"><label>日</label><input type="number" id="bd" value="15" min="1" max="31"></div>
+          <div class="fg"><label>时辰</label><select id="bh"><option value="0">子时</option><option value="2">丑时</option><option value="4">寅时</option><option value="6">卯时</option><option value="8">辰时</option><option value="10">巳时</option><option value="12">午时</option><option value="14">未时</option><option value="16">申时</option><option value="18">酉时</option><option value="20">戌时</option><option value="22">亥时</option></select></div>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:6px;align-items:center;">
+          <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;color:var(--text-sec);"><input type="radio" name="bg" value="男" checked style="width:auto;"> 男</label>
+          <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;color:var(--text-sec);"><input type="radio" name="bg" value="女" style="width:auto;"> 女</label>
+          <button class="btn btn-g" onclick="doBaZi()" style="margin-left:auto;">☰ 排盘</button>
+          <span id="bz-load" style="display:none;"><span class="spin"></span>运转</span>
+        </div>
+      </div>
+      <div class="res" id="bz-res">
+        <div style="text-align:center;margin-bottom:14px;">
+          <div style="font-size:12px;color:var(--text-dim);"><span id="bz-sx"></span>年 · <span id="bz-g"></span></div>
+          <div style="font-size:13px;color:var(--gold);margin-top:3px;" id="bz-ov"></div>
+        </div>
+        <div class="sizhu" id="bz-zhu"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;">
+          <div class="card"><h3>⚡ 五行</h3><div id="bz-wx" style="display:flex;gap:8px;flex-wrap:wrap;"></div></div>
+          <div class="card"><h3>🔗 冲合</h3><div id="bz-ch" style="font-size:12px;color:var(--text-sec);"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 六爻 ═══ -->
+    <section class="page" id="page-liuyao">
+      <div class="page-hdr">
+        <h1><span class="g">〰 六爻占卜</span> · 火珠林法</h1>
+        <p>三枚铜钱摇卦得象。以卦象为体、爻象为用、世应定位。不诚不占 · 不义不占 · 不疑不占。</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <button class="btn btn-g" onclick="doLiuYao()">〰 摇卦 · 三枚铜钱</button>
+        <span id="ly-load" style="display:none;"><span class="spin"></span>卦象生成</span>
+      </div>
+      <div class="res" id="ly-res">
+        <div style="text-align:center;margin-bottom:12px;">
+          <div style="font-size:18px;font-weight:700;color:var(--gold);" id="ly-bg"></div>
+          <div style="font-size:13px;color:var(--text-sec);margin-top:3px;" id="ly-bg2"></div>
+        </div>
+        <div class="yao-box" id="ly-yaos"></div>
+      </div>
+    </section>
+
+    <!-- ═══ 紫微斗数 ═══ -->
+    <section class="page" id="page-ziwei">
+      <div class="page-hdr">
+        <h1><span class="g">✧ 紫微斗数</span> · 星曜推演</h1>
+        <p>十二宫 / 十四主星 / 四化飞星。由 KING 智能体协作提供 calc_ziwei v1.0 引擎。</p>
+      </div>
+      <div class="card">
+        <div class="fr">
+          <div class="fg"><label>农历年</label><input type="number" id="zw-y" value="1990" min="1900" max="2100"></div>
+          <div class="fg"><label>农历月</label><select id="zw-m">${[1,2,3,4,5,6,7,8,9,10,11,12].map(m=>`<option value="${m}">${m}月</option>`).join('')}</select></div>
+          <div class="fg"><label>农历日</label><input type="number" id="zw-d" value="15" min="1" max="30"></div>
+          <div class="fg"><label>时辰</label><select id="zw-h"><option value="0">子时</option><option value="2">丑时</option><option value="4">寅时</option><option value="6">卯时</option><option value="8">辰时</option><option value="10">巳时</option><option value="12">午时</option><option value="14">未时</option><option value="16">申时</option><option value="18">酉时</option><option value="20">戌时</option><option value="22">亥时</option></select></div>
+        </div>
+        <div style="display:flex;gap:12px;margin-top:6px;align-items:center;">
+          <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;color:var(--text-sec);"><input type="radio" name="zw-g" value="M" checked style="width:auto;"> 男</label>
+          <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:13px;color:var(--text-sec);"><input type="radio" name="zw-g" value="F" style="width:auto;"> 女</label>
+          <button class="btn btn-p" onclick="doZiWei()" style="margin-left:auto;">✧ 排盘</button>
+          <span id="zw-load" style="display:none;"><span class="spin"></span>星曜运转</span>
+        </div>
+      </div>
+      <div class="res" id="zw-res">
+        <div style="text-align:center;margin-bottom:14px;">
+          <div style="font-size:12px;color:var(--text-dim);">命主 · <span id="zw-zodiac"></span></div>
+          <div style="font-size:13px;color:var(--gold);margin-top:3px;" id="zw-4zhu"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;">
+          <div class="card" style="grid-column:1/-1;"><h3>✧ 十四主星分布</h3><div id="zw-stars" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;"></div></div>
+          <div class="card" style="grid-column:1/-1;"><h3>✧ 十二宫</h3><div id="zw-palaces" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;"></div></div>
+          <div class="card"><h3>⚡ 四化</h3><div id="zw-4h" style="display:flex;gap:8px;flex-wrap:wrap;"></div></div>
+          <div class="card"><h3>📈 大限</h3><div id="zw-dx" style="font-size:12px;color:var(--text-sec);"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 奇门遁甲 ═══ -->
+    <section class="page" id="page-qimen">
+      <div class="page-hdr">
+        <h1><span class="g">◈ 奇门遁甲</span> · 时空盘面</h1>
+        <p>九宫 / 八门 / 九星 / 八神 四层盘面。三式之首。引擎由 KING 协作中。</p>
+      </div>
+      <div class="card">
+        <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
+          <div class="fg"><label>当前时间</label><input type="datetime-local" id="qm-time"></div>
+          <button class="btn btn-p" onclick="doQiMen()">◈ 起盘</button>
+          <span id="qm-load" style="display:none;"><span class="spin"></span>九宫运转</span>
+        </div>
+      </div>
+      <div class="res" id="qm-res">
+        <div style="text-align:center;margin-bottom:12px;">
+          <div style="font-size:14px;color:var(--gold);font-weight:600;" id="qm-overview"></div>
+          <div style="font-size:12px;color:var(--text-sec);margin-top:3px;"><span id="qm-term"></span> · <span id="qm-dun"></span></div>
+        </div>
+        <div id="qm-display" style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;max-width:390px;margin:12px auto;"></div>
+        <div style="margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div class="card"><h3>⚡ 值符值使</h3><div id="qm-zfzs" style="font-size:13px;color:var(--text-sec);"></div></div>
+          <div class="card"><h3>◇ 马星空亡</h3><div id="qm-mxkw" style="font-size:13px;color:var(--text-sec);"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 排盘历史 ═══ -->
+    <section class="page" id="page-history">
+      <div class="page-hdr">
+        <h1><span class="g">⏎ 排盘历史</span> · 命理记录</h1>
+        <p>所有排盘记录自动保存在本地，随时回顾。</p>
+      </div>
+      <div class="card">
+        <div style="display:flex;gap:8px;margin-bottom:16px;">
+          <button class="btn btn-o" onclick="clearHistory()">🗑 清空历史</button>
+          <button class="btn btn-o" onclick="exportHistory()">📤 导出</button>
+        </div>
+        <div id="history-list">
+          <div style="text-align:center;padding:32px;color:var(--text-dim);font-size:13px;">暂无排盘记录，使用四柱八字/紫微/六爻后自动保存</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 设置 ═══ -->
+    <section class="page" id="page-settings">
+      <div class="page-hdr">
+        <h1><span class="g">⚙ 设置</span> · 推理引擎配置</h1>
+        <p>选择推理模式以平衡性能与精度。纯引擎模式可不依赖大模型独立运行。</p>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3>🧠 推理模式</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;">
+          <div class="mode-card" data-mode="local" style="padding:16px;background:var(--bg-glass);border:2px solid var(--border-glass);border-radius:var(--radius-sm);cursor:pointer;transition:var(--trans);">
+            <div style="font-size:22px;margin-bottom:4px;">💻</div>
+            <div style="font-size:14px;font-weight:600;color:var(--gold);">本地 LLM</div>
+            <div style="font-size:11px;color:var(--text-sec);margin-top:4px;">使用本地运行的模型（Ollama/llama.cpp）</div>
+          </div>
+          <div class="mode-card" data-mode="api" style="padding:16px;background:var(--bg-glass);border:2px solid var(--border-glass);border-radius:var(--radius-sm);cursor:pointer;transition:var(--trans);">
+            <div style="font-size:22px;margin-bottom:4px;">☁️</div>
+            <div style="font-size:14px;font-weight:600;color:var(--purple-light);">API 接入</div>
+            <div style="font-size:11px;color:var(--text-sec);margin-top:4px;">通过 API 调用云端大模型</div>
+          </div>
+          <div class="mode-card" data-mode="hybrid" style="padding:16px;background:var(--bg-glass);border:2px solid var(--border-glass);border-radius:var(--radius-sm);cursor:pointer;transition:var(--trans);">
+            <div style="font-size:22px;margin-bottom:4px;">🔄</div>
+            <div style="font-size:14px;font-weight:600;color:var(--cyan);">混合推理</div>
+            <div style="font-size:11px;color:var(--text-sec);margin-top:4px;">本地优先，复杂请求自动切换 API</div>
+          </div>
+          <div class="mode-card" data-mode="engine" style="padding:16px;background:var(--bg-glass);border:2px solid var(--border-glass);border-radius:var(--radius-sm);cursor:pointer;transition:var(--trans);">
+            <div style="font-size:22px;margin-bottom:4px;">⚡</div>
+            <div style="font-size:14px;font-weight:600;color:var(--emerald);">纯引擎推理</div>
+            <div style="font-size:11px;color:var(--text-sec);margin-top:4px;">仅术数引擎，不依赖任何 LLM</div>
+          </div>
+        </div>
+        <div style="margin-top:12px;padding:10px 14px;background:var(--bg-glass);border-radius:var(--radius-sm);font-size:12px;color:var(--text-sec);">
+          当前模式: <strong id="current-mode-name">纯引擎推理</strong>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;display:none;" id="api-config">
+        <h3>☁️ API 配置</h3>
+        <div class="fg" style="margin-top:10px;"><label>API Endpoint</label><input type="url" id="api-endpoint" placeholder="https://api.openai.com/v1/chat/completions" value="https://api.deepseek.com/v1/chat/completions"></div>
+        <div class="fg"><label>API Key</label><input type="password" id="api-key" placeholder="sk-..."></div>
+        <div class="fg"><label>模型名称</label>
+          <select id="api-model">
+            <option value="deepseek-chat">DeepSeek Chat</option>
+            <option value="gpt-4o">GPT-4o</option>
+            <option value="gpt-4o-mini">GPT-4o Mini</option>
+            <option value="claude-3-sonnet">Claude 3 Sonnet</option>
+            <option value="qwen-plus">通义千问 Plus</option>
+            <option value="custom">自定义</option>
+          </select>
+        </div>
+        <button class="btn btn-p" onclick="testAPIConnection()" style="margin-top:8px;">🔗 测试连接</button>
+        <span id="api-test-result" style="margin-left:10px;font-size:13px;"></span>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;display:none;" id="local-config">
+        <h3>💻 本地 LLM 配置</h3>
+        <div class="fg" style="margin-top:10px;"><label>Ollama Endpoint</label><input type="url" id="ollama-endpoint" value="http://127.0.0.1:11434" placeholder="http://127.0.0.1:11434"></div>
+        <div class="fg"><label>模型名称</label>
+          <select id="ollama-model">
+            <option value="qwen2.5:7b">Qwen 2.5 (7B)</option>
+            <option value="qwen2.5:14b">Qwen 2.5 (14B)</option>
+            <option value="deepseek-r1:7b">DeepSeek R1 (7B)</option>
+            <option value="llama3.1:8b">Llama 3.1 (8B)</option>
+            <option value="gemma2:9b">Gemma 2 (9B)</option>
+            <option value="mistral:7b">Mistral (7B)</option>
+          </select>
+        </div>
+        <button class="btn btn-p" onclick="testLocalLLM()" style="margin-top:8px;">🔗 测试连接</button>
+        <span id="local-test-result" style="margin-left:10px;font-size:13px;"></span>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <h3>🔧 引擎调度</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
+          <div class="fg"><label>八字排盘引擎</label>
+            <select id="engine-bazi"><option value="local">本地引擎 (calc_bazi)</option></select>
+          </div>
+          <div class="fg"><label>紫微斗数引擎</label>
+            <select id="engine-ziwei"><option value="king">KING 引擎 (calc_ziwei v1.0)</option></select>
+          </div>
+          <div class="fg"><label>奇门遁甲引擎</label>
+            <select id="engine-qimen"><option value="king">KING 引擎 (calc_qimen v1.0)</option></select>
+          </div>
+          <div class="fg"><label>六爻引擎</label>
+            <select id="engine-liuyao"><option value="local">本地引擎 (calc_liuyao)</option></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>💾 数据管理</h3>
+        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+          <button class="btn btn-o" onclick="exportAllData()">📤 导出全部数据</button>
+          <button class="btn btn-o" onclick="importAllData()">📥 导入数据</button>
+          <button class="btn btn-o" style="border-color:var(--rose);color:var(--rose);" onclick="clearAllData()">🗑 清空全部数据</button>
+        </div>
+        <div style="margin-top:12px;padding:10px 14px;background:var(--bg-glass);border-radius:var(--radius-sm);font-size:11px;color:var(--text-dim);">
+          数据存储于浏览器 localStorage，清除浏览器数据会导致设置丢失。
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ 太白炁渊 ═══ -->
+    <section class="page" id="page-knowledge">
+      <div class="page-hdr">
+        <h1><span class="g">📖 太白炁渊</span> · 命理知识</h1>
+        <p>以唯物主义道家为骨、黑塞自我探索为肉、维特根斯坦语言边界为眼的修行者人格。</p>
+      </div>
+      <div class="k-grid" id="k-grid"></div>
+      <div class="footer">
+        <div class="qt">"天行健，君子以自强不息。地势坤，君子以厚德载物。命随流水，行运济舟。"</div>
+        <div>太白炁渊 · 命理全栈 v2.0 · 双智能体协作构建</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="/js/nebula-bg.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>

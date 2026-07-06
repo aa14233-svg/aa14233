@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>🌌 螺旋星系</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#000}
+
+/* 暗层：深紫灰 → 极暗 */
+#bg-dark{
+  position:fixed;inset:0;z-index:0;
+  background:radial-gradient(ellipse at 50% 50%, #2a2b36 0%, #0b0c10 80%)
+}
+/* 亮层：珍珠白 → 淡紫灰，CSS 呼吸 */
+#bg-light{
+  position:fixed;inset:0;z-index:1;
+  background:radial-gradient(ellipse at 50% 50%, #f4f4f8 0%, #d2d2dd 70%);
+  opacity:0;
+  animation:breathe 12s ease-in-out infinite alternate;
+  pointer-events:none
+}
+@keyframes breathe{0%{opacity:0}45%{opacity:.15}55%{opacity:.15}100%{opacity:0}}
+
+#c{position:fixed;inset:0;z-index:2;display:block;width:100vw;height:100vh}
+#loading{
+  position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;
+  color:rgba(255,255,255,.15);font:13px/1 'SF Mono',monospace;letter-spacing:.3em;
+  text-transform:uppercase;animation:pulse 1.8s ease-in-out infinite
+}
+@keyframes pulse{0%,100%{opacity:.15}50%{opacity:.5}}
+</style>
+</head>
+<body>
+<div id="bg-dark"></div>
+<div id="bg-light"></div>
+<div id="loading">✦ 星系生成中 ✦</div>
+<canvas id="c"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){'use strict';
+
+// ================================================================
+// 1. Canvas 生成圆形渐变纹理（多层光晕，比纯 shader 更真实）
+// ================================================================
+function makeGlowTexture(){
+  var size=128, c=document.createElement('canvas');
+  c.width=c.height=size;
+  var ctx=c.getContext('2d');
+  var cx=size/2, cy=size/2;
+  // 多层同心圆叠加 - 每层不同透明度，产生柔和光晕
+  for(var i=1;i<40;i++){
+    ctx.beginPath();
+    ctx.arc(cx,cy,(size/3)+(i*1.2),0,Math.PI*2);
+    ctx.fillStyle='rgba(255,255,255,'+(1/(i*0.7+0.3))+')';
+    ctx.fill();
+  }
+  // 中心核心高亮
+  var g=ctx.createRadialGradient(cx,cy,0,cx,cy,size*0.3);
+  g.addColorStop(0,'rgba(255,255,255,1)');
+  g.addColorStop(0.3,'rgba(255,255,255,0.6)');
+  g.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=g;
+  ctx.fillRect(0,0,size,size);
+  return new THREE.CanvasTexture(c);
+}
+
+// ================================================================
+// 2. 几何：3 悬臂螺旋星系
+// ================================================================
+var N=25000, BR=3, SF=5.5, RM=42;
+var pos=new Float32Array(N*3), col=new Float32Array(N*3), siz=new Float32Array(N);
+var t2=2*Math.PI;
+
+for(var i=0;i<N;i++){
+  var i3=i*3;
+  // 核心密集（pow 1.8 比平方稍缓），让粒子分布更自然
+  var r=Math.pow(Math.random(),1.8)*RM;
+  var sa=r*SF;
+  var ba=(i%BR)*(t2/BR)+Math.random()*0.08; // 悬臂加微小随机偏移，更自然
+  var a=ba+sa;
+  var x=r*Math.cos(a), z=r*Math.sin(a);
+  var yn=r/RM;
+  // Y 厚度：中心厚实，指数衰减，比之前更厚
+  var y=(Math.random()*2-1)*10*Math.exp(-yn*3.0);
+  // 散射噪声随半径增大
+  var sc=1.8+yn*0.6*RM;
+  x+=(Math.random()*2-1)*sc;
+  y+=(Math.random()*2-1)*sc*0.35;
+  z+=(Math.random()*2-1)*sc;
+
+  // 外层晕（15% 概率）
+  if(Math.random()<.15){
+    var oR=RM*(0.6+Math.random()*1.4);
+    var oA=oR*SF+ba+(Math.random()-0.5)*0.5;
+    x+=oR*Math.cos(oA)*0.35;
+    z+=oR*Math.sin(oA)*0.35;
+  }
+
+  pos[i3]=x; pos[i3+1]=y; pos[i3+2]=z;
+
+  // 颜色：核心暖青紫(0.35,0.20,0.82) → 边缘粉紫(0.78,0.35,0.72)
+  var d=Math.sqrt(x*x+z*z), n=Math.min(d/RM,1), rn=Math.random();
+  col[i3]  =0.35+0.43*n+0.10*rn;
+  col[i3+1]=0.20+0.15*n+0.08*rn;
+  col[i3+2]=0.82-0.10*n+0.12*rn;
+  // 大小：中心大、边缘小，带随机
+  siz[i]=(2.8-n*2.2)*(0.5+0.5*Math.random());
+}
+
+// ================================================================
+// 3. 着色器（仿参考库的 point size 衰减 + 纹理采样）
+// ================================================================
+var vs=[
+  'attribute float aSize;',
+  'attribute vec3 aColor;',
+  'varying vec3 vColor;',
+  'uniform float uTime;',
+  'void main(){',
+  '  vColor=aColor;',
+  // 流光微动
+  '  float w=sin(uTime*.2+position.x*.03+position.z*.03)*.10;',
+  '  vec3 p=vec3(position.x,position.y+w,position.z);',
+  '  vec4 mv=modelViewMatrix*vec4(p,1.);',
+  // 透视衰减（参考 galaxy-shader 的 length 方式）
+  '  gl_PointSize=aSize*(280./length(mv.xyz));',
+  '  gl_PointSize=clamp(gl_PointSize,.8,90.);',
+  '  gl_Position=projectionMatrix*mv;',
+  '}'
+].join('\n');
+
+var fs=[
+  'uniform vec3 color;',
+  'uniform sampler2D texture;',
+  'varying vec3 vColor;',
+  'void main(){',
+  '  vec4 tex=texture2D(texture,gl_PointCoord);',
+  '  gl_FragColor=vec4(vColor*color,tex.a);',
+  '}'
+].join('\n');
+
+// ================================================================
+// 4. Three.js 初始化
+// ================================================================
+var cv=document.getElementById('c');
+var sc=new THREE.Scene();
+
+var ca=new THREE.PerspectiveCamera(55,cv.clientWidth/cv.clientHeight,.1,500);
+ca.position.set(0,8,38);
+ca.lookAt(0,0,0);
+
+var rn=new THREE.WebGLRenderer({canvas:cv,antialias:!0,alpha:!0});
+rn.setSize(cv.clientWidth,cv.clientHeight);
+rn.setPixelRatio(Math.min(window.devicePixelRatio,2));
+rn.setClearColor(0,0);
+
+var g=new THREE.BufferGeometry();
+g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+g.setAttribute('aColor',new THREE.BufferAttribute(col,3));
+g.setAttribute('aSize',new THREE.BufferAttribute(siz,1));
+
+// 参考 galaxy-shader 使用纹理采样 + 自定义 color uniform
+var tex=makeGlowTexture();
+var mt=new THREE.ShaderMaterial({
+  uniforms:{
+    uTime:{value:0},
+    color:{value:new THREE.Color(1,1,1)},
+    texture:{value:tex}
+  },
+  vertexShader:vs,
+  fragmentShader:fs,
+  transparent:!0,
+  depthWrite:!1,
+  blending:THREE.AdditiveBlending,
+});
+
+var pt=new THREE.Points(g,mt);
+pt.frustumCulled=!1;
+
+var gr=new THREE.Group();
+gr.add(pt);
+gr.rotation.x=1.2;
+sc.add(gr);
+
+// ================================================================
+// 5. 动画
+// ================================================================
+function anim(t){
+  requestAnimationFrame(anim);
+  gr.rotation.y+=.0018;
+  var b=1+Math.sin(t*.00035)*.012;
+  gr.scale.set(b,b,b);
+  mt.uniforms.uTime.value=t/1000;
+  rn.render(sc,ca);
+}
+function rs(){
+  var w=window.innerWidth,h=window.innerHeight;
+  ca.aspect=w/h;ca.updateProjectionMatrix();rn.setSize(w,h);
+}
+window.addEventListener('resize',rs);
+document.getElementById('loading').style.display='none';
+anim(0);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+.package-lock.json
+
+# Debug symbols
+*.pdb
+
+# Build artifacts (excluding small deliverable binaries)
+*.dll
+*.so
+*.dylib
+*.wasm
+
+# ZIP packages
+*.zip
+
+# OS
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.sln.docstates
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local

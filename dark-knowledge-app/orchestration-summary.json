@@ -1,0 +1,98 @@
+{
+  "project": {
+    "name": "深色知识管理",
+    "deviceType": "desktop",
+    "operatingMode": "free-explore",
+    "operation": "create",
+    "designRead": "知识管理桌面应用 / 个人知识工作者 / 专注沉稳 / 中等密度 / 避免过亮色彩破坏沉浸感",
+    "designDials": {
+      "layoutVariance": 2,
+      "motionIntensity": 1,
+      "visualDensity": 3
+    },
+    "styleContinuityAnchors": {
+      "colorScheme": {
+        "bgBase": "#1a0f0e",
+        "bgSurface": "#241715",
+        "bgElevated": "#2d1d1a",
+        "textPrimary": "#d4d0cc",
+        "accent": "#d9773a",
+        "border": "#362825"
+      },
+      "typographySystem": {
+        "sans": "Inter, -apple-system, sans-serif",
+        "mono": "JetBrains Mono, monospace"
+      },
+      "shapeSystem": {
+        "radiusSm": "4px",
+        "radiusMd": "8px",
+        "radiusLg": "12px"
+      },
+      "surfaceAndDepth": {
+        "staticShadowAlphaMax": 0.05,
+        "floatingElevation": "shadow-md"
+      }
+    },
+    "generationTree": {
+      "nodeId": "gen-dka-root",
+      "kind": "project-shell",
+      "pageIds": ["page-main"],
+      "output": "partials/project-shell.html",
+      "sharedRegions": ["html-frame", "body-shell", "font-imports", "css-links"],
+      "privateRegions": [],
+      "mutableSlots": [],
+      "status": "planned",
+      "children": [
+        {
+          "nodeId": "gen-dka-main",
+          "kind": "page-leaf",
+          "pageIds": ["page-main"],
+          "output": "pages/main.html",
+          "sharedRegions": [],
+          "privateRegions": ["full-page-content"],
+          "mutableSlots": [],
+          "status": "planned",
+          "children": []
+        }
+      ]
+    }
+  },
+  "designSource": {
+    "operatingMode": "free-explore",
+    "styleConstraints": {
+      "radiusMax": 16,
+      "staticShadowAlphaMax": 0.05
+    },
+    "brandPrefix": "dka",
+    "cssPath": "colors_and_type.css",
+    "libraryIdentity": null
+  },
+  "pages": [
+    {
+      "nodeId": "page-main",
+      "title": "深色知识管理",
+      "htmlSrc": "pages/main.html",
+      "pageIndex": 1,
+      "pageType": "showcase",
+      "visualNorthStar": "沉浸式知识管理主界面，深色暖调背景，左侧文件导航树，中央笔记编辑器，右侧信息面板",
+      "compositionPattern": "三栏布局：左侧侧边栏 + 中央主内容区 + 右侧辅助面板",
+      "continuityAnchors": [
+        "全局深色暖调背景 #1a0f0e",
+        "暖橙色强调 #d9773a",
+        "统一4px圆角按钮和输入框",
+        "Inter字体体系"
+      ],
+      "componentPlan": [],
+      "imagePlan": [],
+      "chartsRequired": false,
+      "sharedShellContract": {
+        "staticShellSelectors": ["html", "body"],
+        "mutableRegions": ["body"]
+      },
+      "mutableRegions": ["full-page-content"]
+    }
+  ],
+  "assets": [],
+  "wiringPlan": [],
+  "hiddenInteractionPlan": []
+}

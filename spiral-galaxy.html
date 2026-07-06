@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>🌌 螺旋星系粒子云</title>
+<style>
+  /* ====================================================================
+   * 阶段一：呼吸渐变背景层
+   * ==================================================================== */
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  html, body {
+    width:100%; height:100%;
+    overflow:hidden;
+    background:#0b0c10;
+  }
+
+  /* 暗色底层：深紫灰→极暗 */
+  #bg-dark {
+    position:fixed; inset:0; z-index:0;
+    background:radial-gradient(ellipse at 50% 50%, #1e1b2e 0%, #0b0c10 80%);
+  }
+
+  /* 亮色表层：珍珠白→淡紫灰，通过 opacity 呼吸 */
+  #bg-light {
+    position:fixed; inset:0; z-index:1;
+    background:radial-gradient(ellipse at 50% 50%, #e8e4f0 0%, #b8b0cc 70%);
+    opacity:0;
+    animation: breathe 12s ease-in-out infinite alternate;
+    pointer-events:none;
+  }
+
+  @keyframes breathe {
+    0%   { opacity:0; }
+    50%  { opacity:0.18; }
+    100% { opacity:0; }
+  }
+
+  /* Three.js 画布置于最上层 */
+  #galaxy-canvas {
+    position:fixed; inset:0; z-index:2;
+    display:block;
+    width:100vw; height:100vh;
+  }
+
+  /* ── HUD ── */
+  #hud {
+    position:fixed; bottom:32px; left:50%; transform:translateX(-50%);
+    z-index:3;
+    color:rgba(255,255,255,0.5);
+    font:12px/1.6 'SF Mono','Cascadia Code','Consolas',monospace;
+    text-align:center;
+    pointer-events:none;
+    user-select:none;
+    text-shadow:0 0 24px rgba(0,0,0,0.95), 0 0 12px rgba(0,0,0,0.5);
+    letter-spacing:0.06em;
+    transition:opacity 0.6s;
+  }
+  #hud .fps { font-size:20px; font-weight:600; color:rgba(255,255,255,0.8); }
+  #hud .label { font-size:10px; opacity:0.45; text-transform:uppercase; letter-spacing:0.12em; }
+
+  #loading {
+    position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+    z-index:10;
+    color:rgba(255,255,255,0.2);
+    font:13px/1 'SF Mono','Cascadia Code','Consolas',monospace;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    animation:pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity:0.15; }
+    50%     { opacity:0.6; }
+  }
+</style>
+</head>
+<body>
+
+<div id="bg-dark"></div>
+<div id="bg-light"></div>
+<div id="loading">✦ 星云生成中 ✦</div>
+<canvas id="galaxy-canvas"></canvas>
+
+<div id="hud">
+  <div class="fps" id="fps-display">--</div>
+  <div class="label">FPS · <span id="particle-count">0</span> particles</div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"
+  }
+}
+</script>
+
+<script type="module">
+/* ======================================================================
+ * 螺旋星系粒子云 — 单文件 Three.js 实现
+ *
+ * 阶段一：CSS 呼吸背景                         ✓
+ * 阶段二：3D 螺旋星系几何拓扑 (20,000 粒子)    ✓
+ * 阶段三：ShaderMaterial + 光晕效果             ✓
+ * 阶段四：自旋 + 呼吸动画                       ✓
+ * ====================================================================== */
+
+import * as THREE from 'three';
+
+// ── 常量 ──
+const PARTICLE_COUNT  = 25000;
+const BRANCHES        = 3;
+const SPIN_FACTOR     = 5.0;
+const RADIUS_MAX      = 48;
+const HEIGHT_FACTOR   = 10;
+const SCATTER_BASE    = 1.0;
+const SCATTER_RADIUS  = 0.5;
+
+// ── DOM 引用 ──
+const canvas  = document.getElementById('galaxy-canvas');
+const fpsEl   = document.getElementById('fps-display');
+const countEl = document.getElementById('particle-count');
+const loading = document.getElementById('loading');
+
+// ======================================================================
+// 阶段二：螺旋星系几何拓扑
+// ======================================================================
+
+function generateGalaxy() {
+  const count   = PARTICLE_COUNT;
+  const pos     = new Float32Array(count * 3);
+  const col     = new Float32Array(count * 3);
+  const sizes   = new Float32Array(count);
+  const randoms = new Float32Array(count);
+
+  const twoPi = Math.PI * 2;
+
+  for (let i = 0; i < count; i++) {
+    const i3 = i * 3;
+
+    // — 半径：平方分布，核心密集 —
+    const radius = Math.pow(Math.random(), 1.6) * RADIUS_MAX;
+
+    // — 螺旋角：距中心越远扭转越大 —
+    const spinAngle = radius * SPIN_FACTOR;
+
+    // — 分配到某条悬臂 —
+    const branchAngle = (i % BRANCHES) * (twoPi / BRANCHES);
+
+    // — 基础盘坐标 —
+    const angle = branchAngle + spinAngle;
+    let x = radius * Math.cos(angle);
+    let z = radius * Math.sin(angle);
+
+    // — Y 高度：中心厚、边缘薄（指数衰减）—
+    const yNorm = radius / RADIUS_MAX;
+    const yRange = HEIGHT_FACTOR * Math.exp(-yNorm * 4.0);
+    const y = (Math.random() * 2 - 1) * yRange;
+
+    // — 散射噪声：半径越大，散布越宽 —
+    const scatter = SCATTER_BASE + yNorm * SCATTER_RADIUS * RADIUS_MAX;
+    x += (Math.random() * 2 - 1) * scatter;
+    z += (Math.random() * 2 - 1) * scatter;
+
+    // — 外层稀薄晕（~12% 概率向外扩散）—
+    if (Math.random() < 0.12) {
+      const outerR   = RADIUS_MAX * (0.8 + Math.random() * 1.2);
+      const outerAng = outerR * SPIN_FACTOR + branchAngle + (Math.random() - 0.5) * 0.4;
+      x += outerR * Math.cos(outerAng) * 0.25;
+      z += outerR * Math.sin(outerAng) * 0.25;
+    }
+
+    pos[i3]     = x;
+    pos[i3 + 1] = y;
+    pos[i3 + 2] = z;
+    randoms[i]  = Math.random();
+
+    // — 颜色：核心青蓝偏紫 → 边缘粉紫 —
+    const dist  = Math.sqrt(x * x + z * z);
+    const normD = Math.min(dist / RADIUS_MAX, 1);
+    const rn    = randoms[i];
+
+    // 核心 (0): R=0.35 G=0.25 B=0.85 (蓝紫)
+    // 中圈:    R=0.55 G=0.30 B=0.75
+    // 边缘 (1): R=0.80 G=0.35 B=0.70 (粉紫)
+    col[i3]     = 0.35 + 0.45 * normD + 0.10 * rn;
+    col[i3 + 1] = 0.25 + 0.10 * normD + 0.08 * rn;
+    col[i3 + 2] = 0.85 - 0.15 * normD + 0.10 * rn;
+
+    // — 大小：核心大（2.8），边缘小（0.4），带随机 —
+    sizes[i] = (2.8 - normD * 2.4) * (0.6 + 0.4 * rn);
+  }
+
+  return { positions: pos, colors: col, sizes, randoms };
+}
+
+const { positions, colors, sizes } = generateGalaxy();
+
+// ======================================================================
+// 阶段三：ShaderMaterial
+// ======================================================================
+
+const vertexShader = `
+  attribute float aSize;
+  attribute vec3  aColor;
+
+  varying vec3  vColor;
+  varying float vAlpha;
+  varying float vDist;
+
+  uniform float uTime;
+
+  void main() {
+    vColor = aColor;
+
+    // — Y 轴微抖动：让星云有"活"的气息 —
+    float jitter = sin(uTime * 0.25 + position.x * 0.04 + position.z * 0.04) * 0.08;
+    vec3 pos = vec3(position.x, position.y + jitter, position.z);
+
+    vec4 mvPos = modelViewMatrix * vec4(pos, 1.0);
+
+    gl_PointSize = aSize * (320.0 / -mvPos.z);
+    gl_PointSize = clamp(gl_PointSize, 0.5, 90.0);
+
+    gl_Position = projectionMatrix * mvPos;
+
+    // — 距离衰减 alpha —
+    float d = length(pos);
+    vDist   = d;
+    vAlpha  = 1.0 - smoothstep(0.0, 55.0, d);
+    vAlpha  = max(vAlpha, 0.08);
+  }
+`;
+
+const fragmentShader = `
+  varying vec3  vColor;
+  varying float vAlpha;
+
+  void main() {
+    vec2 uv = gl_PointCoord - vec2(0.5);
+    float d = length(uv);
+    if (d > 0.5) discard;
+
+    // — 核心光晕：中心爆亮，边缘柔和羽化 —
+    float glow = 0.18 / d - 0.36;
+    glow = clamp(glow, 0.0, 1.0);
+
+    // — 外圈柔和光晕 —
+    float soft = exp(-d * 6.0);
+
+    float alpha = glow * vAlpha * 0.85 + soft * vAlpha * 0.15;
+    alpha = clamp(alpha, 0.0, 1.0);
+
+    // — 中心略微发白的高光 —
+    vec3  color  = mix(vColor, vec3(1.0), glow * 0.3);
+
+    gl_FragColor = vec4(color, alpha);
+  }
+`;
+
+// ======================================================================
+// Three.js 初始化
+// ======================================================================
+
+const scene  = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, canvas.width / canvas.height, 0.1, 500);
+camera.position.set(0, 6, 36);
+camera.lookAt(0, 0, 0);
+
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+  antialias: true,
+  alpha:     true,     // ← 关键：透明，让 CSS 背景透出
+});
+renderer.setSize(canvas.width, canvas.height);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setClearColor(0x000000, 0); // 完全透明清空色
+
+// — 几何体 —
+const geo = new THREE.BufferGeometry();
+geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+geo.setAttribute('aColor',   new THREE.BufferAttribute(colors, 3));
+geo.setAttribute('aSize',    new THREE.BufferAttribute(sizes, 1));
+
+// — 材质 —
+const mat = new THREE.ShaderMaterial({
+  uniforms:       { uTime: { value: 0 } },
+  vertexShader,
+  fragmentShader,
+  transparent:    true,
+  depthWrite:     false,
+  blending:       THREE.AdditiveBlending,
+});
+
+const points = new THREE.Points(geo, mat);
+points.frustumCulled = false;
+
+// — 组：倾斜展现盘面 —
+const group = new THREE.Group();
+group.add(points);
+group.rotation.x = 1.15;
+scene.add(group);
+
+// ======================================================================
+// 阶段四：渲染循环
+// ======================================================================
+
+let lastTime   = 0;
+let frameCount = 0;
+let fpsAccum   = 0;
+let fps        = 0;
+
+function animate(time) {
+  requestAnimationFrame(animate);
+
+  const dt = lastTime ? (time - lastTime) / 1000 : 0.016;
+  lastTime = time;
+
+  // — FPS —
+  frameCount++;
+  fpsAccum += dt;
+  if (fpsAccum >= 1.0) {
+    fps          = Math.round(frameCount / fpsAccum);
+    frameCount   = 0;
+    fpsAccum     = 0;
+    fpsEl.textContent      = fps;
+    countEl.textContent    = PARTICLE_COUNT.toLocaleString();
+  }
+
+  // — 自旋 —
+  group.rotation.y += 0.0016;
+
+  // — 呼吸缩放 —
+  const breathe = 1.0 + Math.sin(time * 0.00035) * 0.012;
+  group.scale.set(breathe, breathe, breathe);
+
+  // — uniform —
+  mat.uniforms.uTime.value = time / 1000;
+
+  renderer.render(scene, camera);
+}
+
+// ======================================================================
+// Resize
+// ======================================================================
+
+function onResize() {
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+}
+window.addEventListener('resize', onResize);
+
+// ======================================================================
+// 启动
+// ======================================================================
+
+loading.style.display = 'none';
+animate(0);
+console.log('[Spiral Galaxy] 已启动 ·', PARTICLE_COUNT, '粒子');
+</script>
+</body>
+</html>

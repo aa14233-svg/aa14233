@@ -1,0 +1,23 @@
+{
+  "nodeId": "gen-dka-root",
+  "kind": "project-shell",
+  "pageIds": ["page-main"],
+  "output": "partials/project-shell.html",
+  "sharedRegions": ["html-frame", "body-shell", "font-imports", "css-links"],
+  "privateRegions": [],
+  "mutableSlots": [],
+  "status": "planned",
+  "children": [
+    {
+      "nodeId": "gen-dka-main",
+      "kind": "page-leaf",
+      "pageIds": ["page-main"],
+      "output": "pages/main.html",
+      "sharedRegions": [],
+      "privateRegions": ["full-page-content"],
+      "mutableSlots": [],
+      "status": "planned",
+      "children": []
+    }
+  ]
+}
